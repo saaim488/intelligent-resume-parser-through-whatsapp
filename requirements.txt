@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+requests
+PyPDF2
+gspread
+oauth2client
+spacy
+sentence-transformers
