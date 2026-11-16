@@ -1,6 +1,6 @@
 {
   "type": "service_account",
-  "project_id": "aiwhtspp",
+  "project_id": "your project id",
   "private_key_id": "your private key id",
   "private_key": "your private key",
   "client_email": "your client email",
