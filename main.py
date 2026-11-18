@@ -12,9 +12,8 @@ app = FastAPI()
 
 print("🚀 AI RESUME PARSER RUNNING")
 
-# -----------------------------
+
 # TWILIO CREDENTIALS
-# -----------------------------
 from dotenv import load_dotenv
 import os
 
@@ -23,9 +22,8 @@ load_dotenv()
 account_sid = os.getenv("TWILIO_SID")
 auth_token = os.getenv("TWILIO_AUTH_TOKEN")
 
-# -----------------------------
-# AI MODELS (FREE)
-# -----------------------------
+
+# AI MODELS 
 nlp = spacy.load("en_core_web_sm")
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
@@ -40,10 +38,7 @@ SKILLS_DB = [
 
 skill_embeddings = model.encode(SKILLS_DB, convert_to_tensor=True)
 
-
-# -----------------------------
 # PDF TEXT EXTRACTION
-# -----------------------------
 def extract_text(pdf_path):
     text = ""
     with open(pdf_path, "rb") as f:
@@ -54,9 +49,7 @@ def extract_text(pdf_path):
     return text
 
 
-# -----------------------------
 # FIXED NAME EXTRACTION (IMPORTANT)
-# -----------------------------
 def extract_name_ai(text):
     lines = [l.strip() for l in text.split("\n") if l.strip()]
 
@@ -94,9 +87,7 @@ def extract_name_ai(text):
     return candidates[0] if candidates else "Unknown"
 
 
-# -----------------------------
 # FIXED SKILL EXTRACTION
-# -----------------------------
 def extract_skills_ai(text):
     text = text.lower().replace("\n", " ")
 
@@ -116,9 +107,7 @@ def extract_skills_ai(text):
     return list(set(keyword_hits + ai_hits))
 
 
-# -----------------------------
 # CONTACT EXTRACTION
-# -----------------------------
 def extract_contact(text):
     email = re.findall(r'\S+@\S+', text)
     phone = re.findall(r'\d{10}', text)
@@ -129,9 +118,7 @@ def extract_contact(text):
     }
 
 
-# -----------------------------
 # FULL PARSER
-# -----------------------------
 def parse_resume(text):
     name = extract_name_ai(text)
     skills = extract_skills_ai(text)
@@ -145,17 +132,13 @@ def parse_resume(text):
     }
 
 
-# -----------------------------
 # HOME
-# -----------------------------
 @app.get("/")
 async def home():
     return {"message": "AI Resume Parser Running"}
 
 
-# -----------------------------
 # WEBHOOK (TWILIO)
-# -----------------------------
 @app.post("/webhook")
 async def webhook(request: Request):
     print("🔥 WEBHOOK HIT")
